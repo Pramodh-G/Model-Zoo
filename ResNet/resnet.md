@@ -72,12 +72,10 @@ In our implementation of the residual network we will be using both the bottlene
 >layers. The following table summarizes the architecture:
 
 
-|output map size | 32x32 | 16x16 | 8x8|
-|:------------: |: ------------- :| :------------:|---------:|
-|#layers(*number of blocks with given input*) | 1+2n | 2n | 2n |
-|#filters(*number of channels*) | 16 | 32 | 64 |
-|(Table 1)|
-
+| output map size | 32x32 | 16x16 | 8x8 |
+|:---------------:|:-----:|:-----:|:---:|
+|     #filters    | 16    |   32  | 64  |
+|     #layers     | 2n+1  | 2n    |  2n |
 
 ## Conclusion
 
