@@ -2,7 +2,7 @@
 
 ## Introduction and Intuition 
 
-The above paper focuses onn improving the depth of deep neural networks while not compromising on 
+The above paper focuses on improving the depth of deep neural networks while not compromising on 
 accuracy.Vanilla Deep networks suffer from a problem which is named as **degradation** (*completely different from over fitting*) in this paper.Degradation causes vanilla networks to have increased training losses (*as opposed to overfitting which causes lower training error*) when the number of layers is increased.The authors of the [paper](https://arxiv.org/abs/1512.03385) have credited this to the inability of optimizing the the network effeciently.
 
 I am writing this summary to help my understanding,as well as anyone who might read this,along with my implementation too.The link to the implementation can be found [here](https://github.com/pramodh-1612/Model-Zoo/blob/master/ResNet_PyTorch.ipynb)
@@ -24,7 +24,7 @@ If this is not the case (e.g., when changing the input/output
 channels), we can perform a linear projection W s by the
 shortcut connections to match the dimensions:
 
-The mathematical reasoning behind why this works is provided by the Universal approximator theorem which states,that given sufficient data and/or time,a neural network can approximate any function (*under some assumptions*).The paper quotes : 
+The mathematical reasoning behind why this works is provided by the Universal approximator theorem which states,that given sufficient data and/or time,a neural network can approximate any function (*under some assumptions*).Another reason why this works is because it makes the layers approximate the zero function(*as we go deeper*) so that optimization can become easier(*Compared to approxiamting identity functions*).The paper quotes : 
 
 >If one hypothesizes that multiple nonlinear layers can asymptoti
 cally approximate complicated functions(such as our hypothesis function H(X) , then it is equivalent to hypothesize that they can asymptotically approxi-
@@ -77,6 +77,27 @@ In our implementation of the residual network we will be using both the bottlene
 |     #filters    | 16    |   32  | 64  |
 |     #layers     | 2n+1  | 2n    |  2n |
 
+We'll be trying to implement the models in two ways :
+
+#### Implementation 1 : 
+
+- ResNet-32.
+- No Dropout layers.
+- Use Softmax in last layer
+- use relu activation
+- No learning rate schedulers .
+- Basic Model trained for $90$ epochs,Bottleneck Model for $80$ epochs.
+
+#### Implementation 2 :
+
+- ResNet-32.
+- Softmax not used.
+- Image Augmentation done.(*Because model suffered from over-fitting*)
+- 2d-Droupout used with $p=0.25$ before last block.
+- Use Celu activation with  $\alpha=0.075$  (*had read [here](https://arxiv.org/pdf/1704.07483.pdf) that celu,being differentiable has faster optimization*).
+- implemented learning rate decay with $\gamma=0.0025$ applied after $50$ and $70$ epochs.
+- Trained both Basic Model and Bottleneck model for $80$ and $70$epochs. 
+
 ## Conclusion
 
 A comparison in the number of parameters in both types of architecture gives us the following
@@ -84,25 +105,55 @@ results(Taken from the **torchsummary** module) :
 
 #### Basic block architecture 
 
-Total params: 468,826
-Trainable params: 468,826
-Non-trainable params: 0
+Total params: $468,826$
+
+Trainable params: $468,826$
+
+Non-trainable params: $0$
 
 #### Bottleneck block architecture 
 
-Total params: 302,266
-Trainable params: 302,266
-Non-trainable params: 0
+Total params: $302,266$
 
-Bottle neck model has about **36%** lesser parameters !!
-In our implementation,basic block model trained on **90** epochs;whereas,the bottleneck trained on **80** epochs.(Both the models were ResNet-32 s).The training took a time of about *1 hour 15 minutes* on each model.The accuracy on the test set was 79.900% for the basic model,and 77.010% for the bottleneck models (*those 10 epochs really made a difference!*).
+Trainable params: $302,266$
+
+Non-trainable params: $0$
+
+Bottle neck model has about **$36$%** lesser parameters!! *(This applies for both the implementations because a dropout layer requires no parameters)*
+
+#### Implementation 1 :
+
+- Training time for both of the models were about *$1$ hour $15$ minutes*.
+- No percievable over-fitting was detected as test losses went down with train losses.
+- this table sums up the results of Implmentation $1$.
+
+| Model type | Test Accuracy | Train Accuracy |
+|:----------:|:-------------:|:--------------:|
+|    Basic   |     $79.90%$    |       $86%$     |
+| Bottleneck |    $77.010%$    |       $85%$      |
+
+
+(*those $10$ epochs really made a difference!*).
+
+#### Implementation 2 : 
+- Training time for both of the models were
+about *35 minutes* (*that's a whopper!*)
+- This decrease in execution time was mainly due the fact that I didn't use [SoftMax](https://stats.stackexchange.com/questions/437231/softmax-function-makes-my-machine-to-train-much-slower),and used [Celu](https://arxiv.org/pdf/1704.07483.pdf).
+- Over-fitting was detected,so dropout was neccessary to prevent it
+- This table sums up the results of Implementation $2$ :
+
+| Model type | Test Accuracy | Train Accuracy |
+|:----------:|:-------------:|:--------------:|
+|    Basic   |     $85.530%$    |       $95%$     |
+| Bottleneck |    $81.2%$    |       $85.93%$      |
 
 ## Inference and scope for improvements 
 
 Clearly,The model accuracies weren't even close to SOTA (*lol*).I feel that this can be attributed to several reasons : 
 
-- Dropout functions can be implemented to further increase accuracy on both the networks.
-- Increasing the depth could provide more accuracy(*That was the point of the paper*,*facepalm!*)     (*Also,Gathering information from my peers showed this to be true indeed;ResNet-50's got you an accuracy of about **89%**(No Dropout implemented,trained for only 60 epochs!)*).
-- I still felt that increasing the epochs could lead to some improvement on the train-test accuracy
+- Dropout functions can be implemented to further deccrease overfitting on both the networks.
+- Increasing the depth could provide more accuracy(*That was the point of the paper*,*facepalm!*)     (*Also,Gathering information from my peers showed this to be true indeed;ResNet-50's got you an accuracy of about **$89$%**(No Dropout implemented,trained for only 60 epochs!)*).
+- Some of my peers had left the network to over-fit the data,thereby getting training accuracy of **$99$**% and a test accuracy of **$84$**%.(*seems counter intuitive,but works!*)(*No Droupout,No Regularization,No Data-Augmentation*)
+- I still felt that increasing the epochs could lead to some improvement on the train-test accuracy.
 
 fin.
