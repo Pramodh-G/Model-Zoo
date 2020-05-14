@@ -3,10 +3,11 @@
 
 ## Introduction
 
->GANs are the most most interesting ideas in the last 10 years of machine learning.
+>GANs are the most interesting ideas in the last 10 years of machine learning.
+
 >-Yann Lecun
 
-GANs or generative adversarial networks first proposed in this [paper](https://arxiv.org/abs/1406.2661),and was very well reaceived by the reasearch community.It has over thousands of citations,and
+GANs or generative adversarial networks first proposed in this [paper](https://arxiv.org/abs/1406.2661),and was very well reaceived by the reasearch community.It has thousands of citations,and
 moroever,the authors of this paper have also written a book on deep learning that has a lot of good reviews on it too.
 
 Most generative algorithms,such as Naive Bayes (*Yes,it has some role to play here*) or Variational auto encoders(*VAEs*) try to learn the distribution from which the data was produced,so that it can
@@ -15,7 +16,7 @@ optimizing a lower bound(*Not getting into the specifics*),which didn't yield th
 
 ## A few keywords before we get started : 
 
-### Minimax-2-player-game :(definitions taken from [here](https://brilliant.org/wiki/minimax/)) 
+### Minimax-2-player-game(definitions taken from [here](https://brilliant.org/wiki/minimax/)):
 
 In game theory, minimax is a decision rule used to minimize the worst-case potential loss; in other words, a player considers all of the best opponent responses to his strategies, and selects the strategy such that the opponent's best strategy gives a payoff as large as possible.
 
@@ -36,7 +37,7 @@ The name "minimax" comes from minimizing the loss involved when the opponent sel
 
 >It is, in fact, what had occurred: both the Allies and the Japanese chose the north, and the Japanese convoy was bombed for 2 days.
 
-### Nash equilibrium : (Defintions taken from [here](https://brilliant.org/wiki/nash-equilibrium/))
+### Nash equilibrium(Defintions taken from [here](https://brilliant.org/wiki/nash-equilibrium/)) :
 
  Nash Equilibrium is a set of strategies that players act out, with the property that no player benefits from changing their strategy. Intuitively, this means that if any given player were told the strategies of all their opponents, they still would choose to retain their original strategy.
 
